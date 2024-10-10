@@ -4,13 +4,19 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
+import { useEffect } from 'react';
 import Logo from '../assets/logo.svg';
 
 function SignIn() {
   const { register, handleSubmit } = useForm();
-  const { signin, errors: signinErrors } = useAuth();
+  const { signin, isAuthenticated, errors: signinErrors } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) navigate('/home');
+  }, [isAuthenticated, navigate]);
 
   const sendData = handleSubmit((data) => {
     signin(data);

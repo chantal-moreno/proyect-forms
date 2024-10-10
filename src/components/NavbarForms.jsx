@@ -6,8 +6,14 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Logo from '../assets/logo.svg';
+import { useNavigate } from 'react-router-dom';
 
 function NavbarForms() {
+  const navigate = useNavigate();
+
+  const handleUsersManagement = () => {
+    navigate('/users-management');
+  };
   return (
     <>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -51,7 +57,7 @@ function NavbarForms() {
               <NavDropdown.Item href="#action/3.1">Account</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">Language</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.3">Dark Mode</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.4">
+              <NavDropdown.Item onClick={handleUsersManagement}>
                 Users Managment
               </NavDropdown.Item>
               <NavDropdown.Divider />
