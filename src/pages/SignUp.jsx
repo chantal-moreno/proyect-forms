@@ -6,7 +6,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 import { useEffect } from 'react';
 import Logo from '../assets/logo.svg';
@@ -15,13 +15,6 @@ function SignUp() {
   const { register, handleSubmit } = useForm();
   const { signup, isAuthenticated, errors: signupErrors } = useAuth();
   const navigate = useNavigate();
-  const handleToSignIn = (e) => handleNavigationClick(e, '/sign-in');
-  const handleToHome = (e) => handleNavigationClick(e, '/home');
-
-  const handleNavigationClick = (e, path) => {
-    e.preventDefault();
-    navigate(path);
-  };
 
   useEffect(() => {
     if (isAuthenticated) navigate('/home');
@@ -104,15 +97,10 @@ function SignUp() {
         </Button>
       </Form>
       <Form.Text className="mb-3">
-        Already have an account?{' '}
-        <a href="#" onClick={handleToSignIn}>
-          Sign In
-        </a>
+        Already have an account? <Link to="/sign-in">Sign In</Link>
       </Form.Text>
       <Form.Text className="mt-3">
-        <a href="#" onClick={handleToHome}>
-          Continue without an account
-        </a>
+        <Link to="/home">Continue without an account</Link>
       </Form.Text>
     </Container>
   );
