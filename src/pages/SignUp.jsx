@@ -4,25 +4,32 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { signUpRequest } from '../api/auth';
+import { useAuth } from '../context/useAuth';
+import { useEffect } from 'react';
 import Logo from '../assets/logo.svg';
 
 function SignUp() {
   const { register, handleSubmit } = useForm();
+  const { signup, isAuthenticated, errors: signupErrors } = useAuth();
   const navigate = useNavigate();
+  const handleToSignIn = (e) => handleNavigationClick(e, '/sign-in');
+  const handleToHome = (e) => handleNavigationClick(e, '/home');
+
+  const handleNavigationClick = (e, path) => {
+    e.preventDefault();
+    navigate(path);
+  };
+
+  useEffect(() => {
+    if (isAuthenticated) navigate('/home');
+  }, [isAuthenticated, navigate]);
 
   const sendData = handleSubmit(async (values) => {
-    const res = await signUpRequest(values);
-    console.log(res);
-    //Go to home
+    signup(values);
   });
-
-  const handleSignInClick = (e) => {
-    e.preventDefault();
-    navigate('/sign-in');
-  };
 
   return (
     <Container
@@ -37,6 +44,13 @@ function SignUp() {
         className="d-inline-block align-top mb-4"
       />
       <h1 className="mb-5">Sign Up</h1>
+      {signupErrors.map((error, i) => {
+        return (
+          <Alert key={i} variant={'danger'}>
+            {error}
+          </Alert>
+        );
+      })}
       <Form onSubmit={sendData}>
         <Row>
           <Col xs={12} md={6} lg={6}>
@@ -75,7 +89,6 @@ function SignUp() {
             {...register('email', { required: true })}
           />
         </InputGroup>
-
         <InputGroup className="mb-3">
           <InputGroup.Text id="basic-addon4">Password</InputGroup.Text>
           <Form.Control
@@ -86,20 +99,20 @@ function SignUp() {
             {...register('password', { required: true })}
           />
         </InputGroup>
-
         <Button className="w-50 mb-4" variant="secondary" type="submit">
           Submit
         </Button>
       </Form>
       <Form.Text className="mb-3">
         Already have an account?{' '}
-        <a href="#" onClick={handleSignInClick}>
+        <a href="#" onClick={handleToSignIn}>
           Sign In
         </a>
       </Form.Text>
       <Form.Text className="mt-3">
-        {/* Go to home */}
-        <a href="#">Continue without an account</a>
+        <a href="#" onClick={handleToHome}>
+          Continue without an account
+        </a>
       </Form.Text>
     </Container>
   );
