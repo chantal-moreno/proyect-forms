@@ -4,6 +4,7 @@ import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn';
 import Home from './pages/Home';
 import UserManagment from './pages/UserManagment';
+import ProtectedRoute from './ProtectedRoute';
 
 function App() {
   return (
@@ -13,7 +14,10 @@ function App() {
           <Route path="/" element={<SignUp />} />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/users-management" element={<UserManagment />} />
+
+          <Route element={<ProtectedRoute />}>
+            <Route path="/users-management" element={<UserManagment />} />
+          </Route>
         </Routes>
       </AuthProvider>
     </>

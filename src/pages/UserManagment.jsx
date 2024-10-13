@@ -4,8 +4,26 @@ import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import NavbarForms from '../components/NavbarForms';
 import Stack from 'react-bootstrap/Stack';
+import { useEffect } from 'react';
+import axios from '../api/axios';
+import { useAuth } from '../context/useAuth';
 
 function UserManagment() {
+  const { user } = useAuth();
+  console.log(user);
+  const fetchAllUsers = async () => {
+    try {
+      const res = await axios.get(`/all-users`);
+      console.log(res.data);
+    } catch (error) {
+      // Modal error.response.data.message = 'Only Admin'
+      console.log(error.response);
+    }
+  };
+  useEffect(() => {
+    fetchAllUsers();
+  }, []);
+
   const handleBlockUsers = () => {
     console.log('block user');
   };

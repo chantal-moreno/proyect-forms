@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { createContext, useState, useEffect } from 'react';
-import { signUpRequest, signInRequest } from '../api/auth';
+import { signUpRequest, signInRequest, verifyTokenRequest } from '../api/auth';
+import Cookies from 'js-cookie';
 
 export const AuthContext = createContext();
 
@@ -32,6 +33,26 @@ export const AuthProvider = ({ children }) => {
       setErrors(error.response.data);
     }
   };
+
+  useEffect(() => {
+    async function checkSignIn() {
+      const cookies = Cookies.get();
+      if (cookies.token) {
+        try {
+          const res = await verifyTokenRequest(cookies.token);
+          if (!res.data) return setIsAuthenticated(false);
+          console.log(res.data);
+          setUser(res.data);
+          setIsAuthenticated(true);
+        } catch (error) {
+          console.log(error.response);
+          setIsAuthenticated(false);
+          setUser(null);
+        }
+      }
+    }
+    checkSignIn();
+  }, []);
 
   useEffect(() => {
     if (errors.length > 0) {
