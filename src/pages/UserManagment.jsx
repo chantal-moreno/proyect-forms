@@ -106,8 +106,21 @@ function UserManagment() {
       setShowAlert(true);
     }
   };
-  const hanldeRemoveAdmin = () => {
-    console.log('remove admin');
+  const hanldeRemoveAdmin = async () => {
+    try {
+      const res = await axios.put('/remove-admins', {
+        userIds: selectedUsers,
+      });
+      console.log(res.data.message);
+      setAlertMessage('Admins removed successfully!');
+      setShowAlert(true);
+      // Refresh users
+      await fetchAllUsers();
+    } catch (error) {
+      console.error(error.response);
+      setAlertMessage('Error removing Admins');
+      setShowAlert(true);
+    }
   };
   return (
     <>
