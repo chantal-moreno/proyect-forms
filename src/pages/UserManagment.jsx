@@ -64,20 +64,31 @@ function UserManagment() {
         userIds: selectedUsers,
       });
       console.log(res.data.message);
-      // Show Alert
       setAlertMessage('Users unblocked successfully!');
       setShowAlert(true);
       // Refresh users
       await fetchAllUsers();
     } catch (error) {
       console.error(error.response);
-      // Show Alert
       setAlertMessage('Error unblocking users');
       setShowAlert(true);
     }
   };
-  const handleDeleteUsers = () => {
-    console.log('delete user');
+  const handleDeleteUsers = async () => {
+    try {
+      const res = await axios.delete('/delete-users', {
+        data: { userIds: selectedUsers },
+      });
+      console.log(res.data.message);
+      setAlertMessage('Users deleted successfully!');
+      setShowAlert(true);
+      // Refresh users
+      await fetchAllUsers();
+    } catch (error) {
+      console.error(error.response);
+      setAlertMessage('Error deleting users');
+      setShowAlert(true);
+    }
   };
   const handleAddAdmin = () => {
     console.log('add admin');
