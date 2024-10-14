@@ -58,8 +58,23 @@ function UserManagment() {
       setShowAlert(true);
     }
   };
-  const handleUnblockUsers = () => {
-    console.log('unblock user');
+  const handleUnblockUsers = async () => {
+    try {
+      const res = await axios.put('/unblock-users', {
+        userIds: selectedUsers,
+      });
+      console.log(res.data.message);
+      // Show Alert
+      setAlertMessage('Users unblocked successfully!');
+      setShowAlert(true);
+      // Refresh users
+      await fetchAllUsers();
+    } catch (error) {
+      console.error(error.response);
+      // Show Alert
+      setAlertMessage('Error unblocking users');
+      setShowAlert(true);
+    }
   };
   const handleDeleteUsers = () => {
     console.log('delete user');
@@ -73,16 +88,17 @@ function UserManagment() {
   return (
     <>
       <NavbarForms />
-      {showAlert && (
-        <Alert
-          variant="success"
-          onClose={() => setShowAlert(false)}
-          dismissible
-        >
-          {alertMessage}
-        </Alert>
-      )}
+
       <Container className="d-flex flex-column mt-5">
+        {showAlert && (
+          <Alert
+            variant="success"
+            onClose={() => setShowAlert(false)}
+            dismissible
+          >
+            {alertMessage}
+          </Alert>
+        )}
         <h2 className="mb-4">Users managment</h2>
         <Stack direction="horizontal" gap={2} className="mb-3">
           <Button
