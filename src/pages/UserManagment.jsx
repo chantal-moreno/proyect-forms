@@ -90,8 +90,21 @@ function UserManagment() {
       setShowAlert(true);
     }
   };
-  const handleAddAdmin = () => {
-    console.log('add admin');
+  const handleAddAdmin = async () => {
+    try {
+      const res = await axios.put('/add-admins', {
+        userIds: selectedUsers,
+      });
+      console.log(res.data.message);
+      setAlertMessage('New Admins added successfully!');
+      setShowAlert(true);
+      // Refresh users
+      await fetchAllUsers();
+    } catch (error) {
+      console.error(error.response);
+      setAlertMessage('Error adding Admins');
+      setShowAlert(true);
+    }
   };
   const hanldeRemoveAdmin = () => {
     console.log('remove admin');
