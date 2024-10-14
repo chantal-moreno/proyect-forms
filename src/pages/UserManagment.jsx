@@ -2,12 +2,15 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
-import NavbarForms from '../components/NavbarForms';
 import Stack from 'react-bootstrap/Stack';
+import Alert from 'react-bootstrap/Alert';
+import NavbarForms from '../components/NavbarForms';
 import { useEffect, useState } from 'react';
 import axios from '../api/axios';
 
 function UserManagment() {
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [users, setUsers] = useState([]);
 
@@ -37,9 +40,23 @@ function UserManagment() {
     }
   };
 
-  const handleBlockUsers = () => {
-    //Toast
-    console.log('block user');
+  const handleBlockUsers = async () => {
+    try {
+      const res = await axios.put('/block-users', {
+        userIds: selectedUsers,
+      });
+      console.log(res.data.message);
+      // Show Alert
+      setAlertMessage('Users blocked successfully!');
+      setShowAlert(true);
+      // Refresh users
+      await fetchAllUsers();
+    } catch (error) {
+      console.error(error.response);
+      // Show Alert
+      setAlertMessage('Error blocking users');
+      setShowAlert(true);
+    }
   };
   const handleUnblockUsers = () => {
     console.log('unblock user');
@@ -56,7 +73,15 @@ function UserManagment() {
   return (
     <>
       <NavbarForms />
-
+      {showAlert && (
+        <Alert
+          variant="success"
+          onClose={() => setShowAlert(false)}
+          dismissible
+        >
+          {alertMessage}
+        </Alert>
+      )}
       <Container className="d-flex flex-column mt-5">
         <h2 className="mb-4">Users managment</h2>
         <Stack direction="horizontal" gap={2} className="mb-3">
