@@ -4,17 +4,22 @@ import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import NavbarForms from '../components/NavbarForms';
 import Stack from 'react-bootstrap/Stack';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import axios from '../api/axios';
-import { useAuth } from '../context/useAuth';
 
 function UserManagment() {
-  const { user } = useAuth();
-  console.log(user);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [users, setUsers] = useState([]);
+
   const fetchAllUsers = async () => {
     try {
-      const res = await axios.get(`/all-users`);
-      console.log(res.data);
+      const res = await axios.get('/all-users');
+      //Change lastLogin date format
+      const formattedUsers = res.data.users.map((user) => ({
+        ...user,
+        lastLogin: new Date(user.lastLogin).toLocaleString(),
+      }));
+      setUsers(formattedUsers);
     } catch (error) {
       // Modal error.response.data.message = 'Only Admin'
       console.log(error.response);
@@ -24,7 +29,16 @@ function UserManagment() {
     fetchAllUsers();
   }, []);
 
+  const handleSelectUser = (userId) => {
+    if (selectedUsers.includes(userId)) {
+      setSelectedUsers(selectedUsers.filter((id) => id !== userId));
+    } else {
+      setSelectedUsers([...selectedUsers, userId]);
+    }
+  };
+
   const handleBlockUsers = () => {
+    //Toast
     console.log('block user');
   };
   const handleUnblockUsers = () => {
@@ -46,13 +60,28 @@ function UserManagment() {
       <Container className="d-flex flex-column mt-5">
         <h2 className="mb-4">Users managment</h2>
         <Stack direction="horizontal" gap={2} className="mb-3">
-          <Button variant="secondary" size="sm" onClick={handleBlockUsers}>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={handleBlockUsers}
+            disabled={selectedUsers.length === 0}
+          >
             <i className="bi bi-lock-fill"></i> Block
           </Button>
-          <Button variant="success" size="sm" onClick={handleUnblockUsers}>
+          <Button
+            variant="success"
+            size="sm"
+            onClick={handleUnblockUsers}
+            disabled={selectedUsers.length === 0}
+          >
             <i className="bi bi-unlock-fill"></i> Unblock
           </Button>
-          <Button variant="danger" size="sm" onClick={handleDeleteUsers}>
+          <Button
+            variant="danger"
+            size="sm"
+            onClick={handleDeleteUsers}
+            disabled={selectedUsers.length === 0}
+          >
             <i className="bi bi-trash3-fill"></i> Delete
           </Button>
           <Button
@@ -60,10 +89,16 @@ function UserManagment() {
             size="sm"
             className="ms-auto"
             onClick={handleAddAdmin}
+            disabled={selectedUsers.length === 0}
           >
             <i className="bi bi-plus-lg"></i> Add Admin
           </Button>
-          <Button variant="danger" size="sm" onClick={hanldeRemoveAdmin}>
+          <Button
+            variant="danger"
+            size="sm"
+            onClick={hanldeRemoveAdmin}
+            disabled={selectedUsers.length === 0}
+          >
             <i className="bi bi-x-lg"></i> Remove Admin
           </Button>
         </Stack>
@@ -71,7 +106,16 @@ function UserManagment() {
           <thead>
             <tr>
               <th>
-                <Form.Check />
+                <Form.Check
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedUsers(users.map((user) => user._id));
+                    } else {
+                      setSelectedUsers([]);
+                    }
+                  }}
+                  checked={selectedUsers.length === users.length}
+                />
               </th>
               <th>Name</th>
               <th>E-mail</th>
@@ -81,16 +125,21 @@ function UserManagment() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                <Form.Check />
-              </td>
-              <td>firstName lastName</td>
-              <td>email</td>
-              <td>lastLogin</td>
-              <td>status</td>
-              <td>role</td>
-            </tr>
+            {users.map((user) => (
+              <tr key={user._id}>
+                <td>
+                  <Form.Check
+                    checked={selectedUsers.includes(user._id)}
+                    onChange={() => handleSelectUser(user._id)}
+                  />
+                </td>
+                <td>{`${user.firstName} ${user.lastName}`}</td>
+                <td>{user.email}</td>
+                <td>{user.lastLogin}</td>
+                <td>{user.status}</td>
+                <td>{user.role}</td>
+              </tr>
+            ))}
           </tbody>
         </Table>
       </Container>
