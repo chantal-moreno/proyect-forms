@@ -52,7 +52,7 @@ function NavbarForms() {
               </InputGroup>
             </Nav>
             <NavDropdown
-              title={<i className="bi bi-gear"></i>}
+              title={<i className="bi bi-gear-fill"></i>}
               id="basic-nav-dropdown"
             >
               <NavDropdown.Item href="#action/3.2">Language</NavDropdown.Item>
