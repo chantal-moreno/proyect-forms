@@ -7,8 +7,10 @@ import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Logo from '../assets/logo.svg';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/useAuth';
 
 function NavbarForms() {
+  const { isAuthenticated, signout } = useAuth();
   const navigate = useNavigate();
 
   const handleUsersManagement = () => {
@@ -18,7 +20,7 @@ function NavbarForms() {
     <>
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
-          <Navbar.Brand href="#home">
+          <Navbar.Brand href="#home-page">
             <img
               alt=""
               src={Logo}
@@ -30,7 +32,7 @@ function NavbarForms() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="#home">Home</Nav.Link>
+              <Nav.Link href="#home-page">Home</Nav.Link>
               <Nav.Link href="#link">Templates</Nav.Link>
               <Nav.Link href="#link">Forms</Nav.Link>
             </Nav>
@@ -57,11 +59,22 @@ function NavbarForms() {
               <NavDropdown.Item href="#action/3.1">Account</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">Language</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.3">Dark Mode</NavDropdown.Item>
-              <NavDropdown.Item onClick={handleUsersManagement}>
-                Users Managment
-              </NavDropdown.Item>
+              {isAuthenticated ? (
+                <NavDropdown.Item onClick={handleUsersManagement}>
+                  Users Managment
+                </NavDropdown.Item>
+              ) : (
+                <></>
+              )}
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.5">Log out</NavDropdown.Item>
+              <NavDropdown.Item
+                href="#sign-in"
+                onClick={() => {
+                  signout();
+                }}
+              >
+                Sign Out
+              </NavDropdown.Item>
             </NavDropdown>
           </Navbar.Collapse>
         </Container>

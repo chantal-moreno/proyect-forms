@@ -34,6 +34,21 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const signout = () => {
+    Cookies.remove('token');
+    setIsAuthenticated(false);
+    setUser(null);
+  };
+
+  useEffect(() => {
+    if (errors.length > 0) {
+      const timer = setTimeout(() => {
+        setErrors([]);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [errors]);
+
   useEffect(() => {
     async function checkSignIn() {
       const cookies = Cookies.get();
@@ -54,18 +69,9 @@ export const AuthProvider = ({ children }) => {
     checkSignIn();
   }, []);
 
-  useEffect(() => {
-    if (errors.length > 0) {
-      const timer = setTimeout(() => {
-        setErrors([]);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [errors]);
-
   return (
     <AuthContext.Provider
-      value={{ signup, signin, user, isAuthenticated, errors }}
+      value={{ signup, signin, signout, user, isAuthenticated, errors }}
     >
       {children}
     </AuthContext.Provider>
