@@ -12,7 +12,6 @@ import { useAuth } from '../context/useAuth';
 function NavbarForms() {
   const { isAuthenticated, signout } = useAuth();
   const navigate = useNavigate();
-
   const handleUsersManagement = () => {
     navigate('/users-management');
   };
@@ -56,7 +55,6 @@ function NavbarForms() {
               title={<i className="bi bi-gear"></i>}
               id="basic-nav-dropdown"
             >
-              <NavDropdown.Item href="#action/3.1">Account</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">Language</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.3">Dark Mode</NavDropdown.Item>
               {isAuthenticated ? (
