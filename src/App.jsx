@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage';
 import UserManagment from './pages/UserManagment';
 import ProtectedRoute from './ProtectedRoute';
 import Template from './pages/Template';
+import AllTemplates from './pages/AllTemplates';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/home-page" element={<HomePage />} />
           <Route path="/template/:templateId" element={<Template />} />
+          <Route path="/all-templates" element={<AllTemplates />} />
 
           <Route element={<ProtectedRoute />}>
             <Route path="/users-management" element={<UserManagment />} />

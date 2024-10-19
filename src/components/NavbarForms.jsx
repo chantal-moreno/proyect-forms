@@ -32,7 +32,7 @@ function NavbarForms() {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link href="#home-page">Home</Nav.Link>
-              <Nav.Link href="#link">Templates</Nav.Link>
+              <Nav.Link href="#all-templates">Templates</Nav.Link>
               <Nav.Link href="#link">Forms</Nav.Link>
             </Nav>
             <Nav className="me-auto">

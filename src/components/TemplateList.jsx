@@ -4,14 +4,15 @@ import Button from 'react-bootstrap/Button';
 import { useEffect, useState } from 'react';
 import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-function LatestTemplates() {
+function TemplateList({ fetchURL, title }) {
   const [templates, setTemplates] = useState([]);
   const navigate = useNavigate();
 
-  const fetchLatestTemplates = async () => {
+  const fetchTemplates = async () => {
     try {
-      const res = await axios.get('/latest-templates');
+      const res = await axios.get(fetchURL);
       const templates = res.data.templates;
       setTemplates(templates);
     } catch (error) {
@@ -19,15 +20,15 @@ function LatestTemplates() {
     }
   };
   useEffect(() => {
-    fetchLatestTemplates();
-  }, []);
+    fetchTemplates();
+  }, [fetchURL]);
 
   const handleOpenTemplate = (templateId) => {
     navigate(`/template/${templateId}`);
   };
   return (
     <Container className="mt-5">
-      <h1>Latest Templates</h1>
+      <h1>{title}</h1>
       <Table striped hover>
         <thead>
           <tr>
@@ -61,4 +62,9 @@ function LatestTemplates() {
   );
 }
 
-export default LatestTemplates;
+TemplateList.propTypes = {
+  fetchURL: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+};
+
+export default TemplateList;

@@ -1,12 +1,13 @@
 import NavbarForms from '../components/NavbarForms';
 import TemplateList from '../components/TemplateList';
-function HomePage() {
+
+function AllTemplates() {
   return (
     <>
       <NavbarForms />
-      <TemplateList fetchURL="/latest-templates" title="Latest Templates" />
+      <TemplateList fetchURL="/all-templates" title="Templates" />
     </>
   );
 }
 
-export default HomePage;
+export default AllTemplates;
