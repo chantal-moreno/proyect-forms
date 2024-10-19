@@ -4,15 +4,24 @@ import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import Stack from 'react-bootstrap/Stack';
 import Alert from 'react-bootstrap/Alert';
+import Modal from 'react-bootstrap/Modal';
 import NavbarForms from '../components/NavbarForms';
 import { useEffect, useState } from 'react';
 import axios from '../api/axios';
+import { useNavigate } from 'react-router-dom';
 
 function UserManagment() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [users, setUsers] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    navigate('/home-page');
+  };
 
   const fetchAllUsers = async () => {
     try {
@@ -24,7 +33,7 @@ function UserManagment() {
       }));
       setUsers(formattedUsers);
     } catch (error) {
-      // Modal error.response.data.message = 'Only Admin'
+      setShowModal(true);
       console.log(error.response);
     }
   };
@@ -221,6 +230,18 @@ function UserManagment() {
           </tbody>
         </Table>
       </Container>
+
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Access Denied</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>ONLY ADMINS</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
