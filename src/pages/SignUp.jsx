@@ -54,6 +54,7 @@ function SignUp() {
                 placeholder="Enter firts name"
                 aria-label="First Name"
                 aria-describedby="basic-addon1"
+                required
                 {...register('firstName', { required: true })}
               />
             </InputGroup>
@@ -66,6 +67,7 @@ function SignUp() {
                 placeholder="Enter last name"
                 aria-label="Lats Name"
                 aria-describedby="basic-addon2"
+                required
                 {...register('lastName', { required: true })}
               />
             </InputGroup>
@@ -79,6 +81,7 @@ function SignUp() {
             placeholder="Enter email"
             aria-label="Email"
             aria-describedby="basic-addon3"
+            required
             {...register('email', { required: true })}
           />
         </InputGroup>
@@ -89,6 +92,7 @@ function SignUp() {
             placeholder="Enter password"
             aria-label="Password"
             aria-describedby="basic-addon4"
+            required
             {...register('password', { required: true })}
           />
         </InputGroup>

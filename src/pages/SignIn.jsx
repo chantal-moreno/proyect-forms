@@ -50,6 +50,7 @@ function SignIn() {
             placeholder="Enter email"
             aria-label="Email"
             aria-describedby="basic-addon3"
+            required
             {...register('email', { required: true })}
           />
         </InputGroup>
@@ -60,6 +61,7 @@ function SignIn() {
             placeholder="Enter password"
             aria-label="Password"
             aria-describedby="basic-addon4"
+            required
             {...register('password', { required: true })}
           />
         </InputGroup>
