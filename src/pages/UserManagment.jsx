@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 function UserManagment() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+  const [alertVariant, setAlertVariant] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [users, setUsers] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -57,6 +58,7 @@ function UserManagment() {
       console.log(res.data.message);
       // Show Alert
       setAlertMessage('Users blocked successfully!');
+      setAlertVariant('success');
       setShowAlert(true);
       // Refresh users
       await fetchAllUsers();
@@ -64,6 +66,7 @@ function UserManagment() {
       console.error(error.response);
       // Show Alert
       setAlertMessage('Error blocking users');
+      setAlertVariant('danger');
       setShowAlert(true);
     }
   };
@@ -74,12 +77,14 @@ function UserManagment() {
       });
       console.log(res.data.message);
       setAlertMessage('Users unblocked successfully!');
+      setAlertVariant('success');
       setShowAlert(true);
       // Refresh users
       await fetchAllUsers();
     } catch (error) {
       console.error(error.response);
       setAlertMessage('Error unblocking users');
+      setAlertVariant('danger');
       setShowAlert(true);
     }
   };
@@ -90,12 +95,14 @@ function UserManagment() {
       });
       console.log(res.data.message);
       setAlertMessage('Users deleted successfully!');
+      setAlertVariant('success');
       setShowAlert(true);
       // Refresh users
       await fetchAllUsers();
     } catch (error) {
       console.error(error.response);
       setAlertMessage('Error deleting users');
+      setAlertVariant('danger');
       setShowAlert(true);
     }
   };
@@ -106,12 +113,14 @@ function UserManagment() {
       });
       console.log(res.data.message);
       setAlertMessage('New Admins added successfully!');
+      setAlertVariant('success');
       setShowAlert(true);
       // Refresh users
       await fetchAllUsers();
     } catch (error) {
       console.error(error.response);
       setAlertMessage('Error adding Admins');
+      setAlertVariant('danger');
       setShowAlert(true);
     }
   };
@@ -128,6 +137,7 @@ function UserManagment() {
     } catch (error) {
       console.error(error.response);
       setAlertMessage('Error removing Admins');
+      setAlertVariant('danger');
       setShowAlert(true);
     }
   };
@@ -138,7 +148,7 @@ function UserManagment() {
       <Container className="d-flex flex-column mt-5">
         {showAlert && (
           <Alert
-            variant="success"
+            variant={alertVariant}
             onClose={() => setShowAlert(false)}
             dismissible
           >
