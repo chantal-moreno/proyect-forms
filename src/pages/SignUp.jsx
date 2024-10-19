@@ -17,7 +17,7 @@ function SignUp() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated) navigate('/home');
+    if (isAuthenticated) navigate('/home-page');
   }, [isAuthenticated, navigate]);
 
   const sendData = handleSubmit(async (values) => {
@@ -100,7 +100,7 @@ function SignUp() {
         Already have an account? <Link to="/sign-in">Sign In</Link>
       </Form.Text>
       <Form.Text className="mt-3">
-        <Link to="/home">Continue without an account</Link>
+        <Link to="/home-page">Continue without an account</Link>
       </Form.Text>
     </Container>
   );

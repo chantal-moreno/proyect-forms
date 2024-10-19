@@ -15,7 +15,7 @@ function SignIn() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated) navigate('/home');
+    if (isAuthenticated) navigate('/home-page');
   }, [isAuthenticated, navigate]);
 
   const sendData = handleSubmit((data) => {
@@ -71,7 +71,7 @@ function SignIn() {
         Don&apos;t have an account? <Link to="/">Sign Up</Link>
       </Form.Text>
       <Form.Text className="mt-3">
-        <Link to="/home">Continue without an account</Link>
+        <Link to="/home-page">Continue without an account</Link>
       </Form.Text>
     </Container>
   );

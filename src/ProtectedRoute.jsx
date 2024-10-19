@@ -6,7 +6,7 @@ function ProtectedRoute() {
   console.log(user, isAuthenticated);
   if (!isAuthenticated) {
     // Modal acces denied please SignUp or SignIn
-    return <Navigate to="/sign-in" replace />;
+    return <Navigate to="/home-page" replace />;
   }
   return <Outlet />;
 }

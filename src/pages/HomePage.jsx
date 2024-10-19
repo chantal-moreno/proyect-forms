@@ -1,6 +1,6 @@
 import NavbarForms from '../components/NavbarForms';
 import LatestTemplates from '../components/LatestTemplates';
-function Home() {
+function HomePage() {
   return (
     <>
       <NavbarForms />
@@ -9,4 +9,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default HomePage;
