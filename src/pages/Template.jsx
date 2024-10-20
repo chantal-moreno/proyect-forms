@@ -77,11 +77,19 @@ function Template() {
             <p className="text-muted">{template.template.description}</p>
           </Col>
           <Col xs={12} md={8} lg={6}>
-            <Image
-              src={OrangeImg}
-              thumbnail
-              style={{ height: '150px', width: '100%' }}
-            />
+            {template.template.image ? (
+              <Image
+                src={template.template.image}
+                thumbnail
+                style={{ height: '150px', width: '100%' }}
+              />
+            ) : (
+              <Image
+                src={OrangeImg}
+                thumbnail
+                style={{ height: '150px', width: '100%' }}
+              />
+            )}
             <h4>Questions</h4>
             <Stack gap={1} className="mx-auto">
               {template.template?.questions?.map((question, index) => (

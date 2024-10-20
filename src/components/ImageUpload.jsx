@@ -1,11 +1,11 @@
 import Form from 'react-bootstrap/Form';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
-function ImageUpload() {
+function ImageUpload({ onImageUpload }) {
   const preset_name = 'custom-forms';
   const cloud_name = 'dz20tyim6';
 
-  const [image, setImage] = useState('');
   const [loading, setLoading] = useState(false);
 
   const uploadImage = async (e) => {
@@ -25,8 +25,7 @@ function ImageUpload() {
       );
 
       const file = await response.json();
-      setImage(file.secure_url);
-      console.log(file.secure_url);
+      onImageUpload(file.secure_url);
       setLoading(false);
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -40,9 +39,13 @@ function ImageUpload() {
         <Form.Label>Change image</Form.Label>
         <Form.Control type="file" onChange={(e) => uploadImage(e)} />
       </Form.Group>
-      {loading ? <p>Loading...</p> : <img src={image} />}
+      {loading && <p>Loading...</p>}
     </>
   );
 }
+
+ImageUpload.propTypes = {
+  onImageUpload: PropTypes.func.isRequired,
+};
 
 export default ImageUpload;

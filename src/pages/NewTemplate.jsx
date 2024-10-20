@@ -1,4 +1,5 @@
 import NavbarForms from '../components/NavbarForms';
+import ImageUpload from '../components/ImageUpload';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -11,14 +12,23 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Badge from 'react-bootstrap/Badge';
 import { useForm } from 'react-hook-form';
 import axios from '../api/axios';
+import { useState } from 'react';
 
 function NewTemplate() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
+  const [uploadedImage, setUploadedImage] = useState('');
+
+  const handleImageUpload = (imageUrl) => {
+    setUploadedImage(imageUrl);
+    setValue('image', imageUrl);
+  };
   const onSubmit = async (data) => {
+    console.log(data);
     try {
       const res = await axios.post('/new-template', data);
       console.log(res.data);
@@ -66,17 +76,22 @@ function NewTemplate() {
                   <p className="text-danger">{errors.description.message}</p>
                 )}
               </Form.Group>
-              <Form.Group controlId="formFile" className="mb-3">
-                <Form.Label>Change image</Form.Label>
-                <Form.Control type="file" {...register('path')} />
-              </Form.Group>
+              <ImageUpload onImageUpload={handleImageUpload} />
             </Col>
             <Col xs={12} md={8} lg={6}>
-              <Image
-                src={OrangeImg}
-                thumbnail
-                style={{ height: '150px', width: '100%' }}
-              />
+              {uploadedImage ? (
+                <Image
+                  src={uploadedImage}
+                  thumbnail
+                  style={{ height: '150px', width: '100%' }}
+                />
+              ) : (
+                <Image
+                  src={OrangeImg}
+                  thumbnail
+                  style={{ height: '150px', width: '100%' }}
+                />
+              )}
               <h3 className="mt-2">Questions</h3>
               <Card className="mb-3">
                 <Card.Body>
