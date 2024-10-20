@@ -7,7 +7,7 @@ import UserManagment from './pages/UserManagment';
 import ProtectedRoute from './ProtectedRoute';
 import Template from './pages/Template';
 import AllTemplates from './pages/AllTemplates';
-import NewTemplate from './pages/NewTemplate';
+import NewTemplate from './pages/newTemplate';
 
 function App() {
   return (
