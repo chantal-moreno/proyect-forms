@@ -49,7 +49,12 @@ function AddQuestion({ onQuestionsChange }) {
     setNewTitle('');
     setErrorMessage('');
   };
-
+  const handleDeleteQuestion = (id) => {
+    console.log(id);
+    const updatedQuestions = questions.filter((question) => question.id !== id);
+    setQuestions(updatedQuestions);
+    onQuestionsChange(updatedQuestions);
+  };
   const getQuestionPosition = (id) => {
     return questions.findIndex((question) => question.id === id);
   };
@@ -68,7 +73,8 @@ function AddQuestion({ onQuestionsChange }) {
       setQuestions(updatedQuestions);
       onQuestionsChange(updatedQuestions);
 
-      return arrayMove(questions, originalPosition, newPosition);
+      // return arrayMove(questions, originalPosition, newPosition);
+      return updatedQuestions;
     });
   };
 
@@ -88,7 +94,7 @@ function AddQuestion({ onQuestionsChange }) {
         onDragEnd={handleDragEnd}
         collisionDetection={closestCorners}
       >
-        <Column questions={questions} />
+        <Column questions={questions} onDelete={handleDeleteQuestion} />
       </DndContext>
 
       <hr />
