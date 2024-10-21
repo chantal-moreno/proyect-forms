@@ -40,7 +40,7 @@ function Question({ id, description, title, type }) {
             <Form.Control
               aria-label="Question description"
               aria-describedby="inputGroup-sizing-default"
-              value={description}
+              defaultValue={description}
             />
           </InputGroup>
           <InputGroup className="mb-3">
@@ -50,7 +50,7 @@ function Question({ id, description, title, type }) {
             <Form.Control
               aria-label="Question title"
               aria-describedby="inputGroup-sizing-default"
-              value={title}
+              defaultValue={title}
             />
           </InputGroup>
         </Card.Body>

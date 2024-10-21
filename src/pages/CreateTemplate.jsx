@@ -21,11 +21,22 @@ function CreateTemplate() {
     formState: { errors },
   } = useForm();
   const [uploadedImage, setUploadedImage] = useState('');
+  const [questions, setQuestions] = useState([]);
 
   const handleImageUpload = (imageUrl) => {
     setUploadedImage(imageUrl);
     setValue('image', imageUrl);
   };
+  const handleQuestionsChange = (updatedQuestions) => {
+    setQuestions(updatedQuestions);
+    updatedQuestions.forEach((question, index) => {
+      setValue(`questions.${index}.title`, question.title);
+      setValue(`questions.${index}.description`, question.description);
+      setValue(`questions.${index}.type`, question.type);
+      setValue(`questions.${index}.order`, question.id);
+    });
+  };
+
   const onSubmit = async (data) => {
     console.log(data);
     try {
@@ -83,7 +94,7 @@ function CreateTemplate() {
                 thumbnail
                 style={{ height: '150px', width: '100%' }}
               />
-              <AddQuestion />
+              <AddQuestion onQuestionsChange={handleQuestionsChange} />
             </Col>
             <Col xs={12} md={8} lg={3}>
               <Form.Group className="mb-3">

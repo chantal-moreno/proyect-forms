@@ -14,8 +14,9 @@ import {
 import { useState } from 'react';
 import Column from './Column';
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import PropTypes from 'prop-types';
 
-function AddQuestion() {
+function AddQuestion({ onQuestionsChange }) {
   const [questions, setQuestions] = useState([]);
   const [newType, setNewType] = useState('');
   const [newDescription, setNewDescription] = useState('');
@@ -26,11 +27,11 @@ function AddQuestion() {
     e.preventDefault();
 
     if (!newType || !newDescription || !newTitle) {
-      setErrorMessage('All fields are required.'); // Mostrar mensaje de error si faltan campos
+      setErrorMessage('All fields are required.');
       return;
     }
 
-    setQuestions((questions) => [
+    const updatedQuestions = [
       ...questions,
       {
         id: questions.length + 1,
@@ -38,7 +39,9 @@ function AddQuestion() {
         title: newTitle,
         type: newType,
       },
-    ]);
+    ];
+    setQuestions(updatedQuestions);
+    onQuestionsChange(updatedQuestions);
 
     // Clear fields
     setNewType('');
@@ -124,5 +127,9 @@ function AddQuestion() {
     </>
   );
 }
+
+AddQuestion.propTypes = {
+  onQuestionsChange: PropTypes.func.isRequired,
+};
 
 export default AddQuestion;
