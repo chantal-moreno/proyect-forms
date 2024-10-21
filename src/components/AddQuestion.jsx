@@ -60,6 +60,14 @@ function AddQuestion({ onQuestionsChange }) {
       const originalPosition = getQuestionPosition(active.id);
       const newPosition = getQuestionPosition(over.id);
 
+      const updatedQuestions = arrayMove(
+        questions,
+        originalPosition,
+        newPosition
+      );
+      setQuestions(updatedQuestions);
+      onQuestionsChange(updatedQuestions);
+
       return arrayMove(questions, originalPosition, newPosition);
     });
   };
@@ -129,7 +137,7 @@ function AddQuestion({ onQuestionsChange }) {
 }
 
 AddQuestion.propTypes = {
-  onQuestionsChange: PropTypes.func.isRequired,
+  onQuestionsChange: PropTypes.func,
 };
 
 export default AddQuestion;

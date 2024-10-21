@@ -29,6 +29,7 @@ function CreateTemplate() {
   };
   const handleQuestionsChange = (updatedQuestions) => {
     setQuestions(updatedQuestions);
+    console.log(updatedQuestions);
     updatedQuestions.forEach((question, index) => {
       setValue(`questions.${index}.title`, question.title);
       setValue(`questions.${index}.description`, question.description);
