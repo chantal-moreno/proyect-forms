@@ -7,7 +7,8 @@ import UserManagment from './pages/UserManagment';
 import ProtectedRoute from './ProtectedRoute';
 import Template from './pages/Template';
 import AllTemplates from './pages/AllTemplates';
-import NewTemplate from './pages/newTemplate';
+import CreateTemplate from './pages/CreateTemplate';
+import AddQuestion from './components/AddQuestion';
 
 function App() {
   return (
@@ -20,11 +21,13 @@ function App() {
           <Route path="/template/:templateId" element={<Template />} />
           <Route path="/all-templates" element={<AllTemplates />} />
 
+          <Route path="/test" element={<AddQuestion />} />
+
           <Route element={<ProtectedRoute />}>
             <Route path="/users-management" element={<UserManagment />} />
             <Route
               path="/all-templates/new-template"
-              element={<NewTemplate />}
+              element={<CreateTemplate />}
             />
           </Route>
         </Routes>
