@@ -16,20 +16,19 @@ import Column from './Column';
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 
 function AddQuestion() {
-  const [questions, setQuestions] = useState([
-    {
-      id: 1,
-      description: 'Educación',
-      title: 'Donde estudiaste?',
-      type: 'Texto',
-    },
-  ]);
+  const [questions, setQuestions] = useState([]);
   const [newType, setNewType] = useState('');
   const [newDescription, setNewDescription] = useState('');
   const [newTitle, setNewTitle] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const addQuestion = (e) => {
     e.preventDefault();
+
+    if (!newType || !newDescription || !newTitle) {
+      setErrorMessage('All fields are required.'); // Mostrar mensaje de error si faltan campos
+      return;
+    }
 
     setQuestions((questions) => [
       ...questions,
@@ -45,6 +44,7 @@ function AddQuestion() {
     setNewType('');
     setNewDescription('');
     setNewTitle('');
+    setErrorMessage('');
   };
 
   const getQuestionPosition = (id) => {
@@ -70,7 +70,7 @@ function AddQuestion() {
   );
 
   return (
-    <Container>
+    <>
       <h3 className="mt-2">Questions</h3>
       <DndContext
         sensors={sensors}
@@ -82,50 +82,46 @@ function AddQuestion() {
 
       <hr />
       <Container className="text-center mb-3">
-        <Form onSubmit={addQuestion}>
-          <Form.Label>Add another question</Form.Label>
-          <Form.Select
-            aria-label="Question type select"
-            value={newType}
-            onChange={(e) => setNewType(e.target.value)}
-            required
-            className="mb-3"
-          >
-            <option>Question type</option>
-            <option value="text">Single line text</option>
-            <option value="textarea">Multiple line text</option>
-            <option value="number">Single number</option>
-          </Form.Select>
-          <InputGroup className="mb-3">
-            <InputGroup.Text id="inputGroup-sizing-default">
-              Description
-            </InputGroup.Text>
-            <Form.Control
-              aria-label="Question description"
-              aria-describedby="inputGroup-sizing-default"
-              value={newDescription}
-              onChange={(e) => setNewDescription(e.target.value)}
-              required
-            />
-          </InputGroup>
-          <InputGroup className="mb-3">
-            <InputGroup.Text id="inputGroup-sizing-default">
-              Title
-            </InputGroup.Text>
-            <Form.Control
-              aria-label="Question title"
-              aria-describedby="inputGroup-sizing-default"
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-              required
-            />
-          </InputGroup>
-          <Button variant="secondary" className="w-50" type="submit">
-            <i className="bi bi-plus-lg"></i> Add
-          </Button>
-        </Form>
+        <Form.Label>Add question</Form.Label>
+        <Form.Select
+          aria-label="Question type select"
+          value={newType}
+          onChange={(e) => setNewType(e.target.value)}
+          className="mb-3"
+        >
+          <option>Question type</option>
+          <option value="text">Single line text</option>
+          <option value="textarea">Multiple line text</option>
+          <option value="number">Single number</option>
+        </Form.Select>
+        <InputGroup className="mb-3">
+          <InputGroup.Text id="inputGroup-sizing-default">
+            Description
+          </InputGroup.Text>
+          <Form.Control
+            aria-label="Question description"
+            aria-describedby="inputGroup-sizing-default"
+            value={newDescription}
+            onChange={(e) => setNewDescription(e.target.value)}
+          />
+        </InputGroup>
+        <InputGroup className="mb-3">
+          <InputGroup.Text id="inputGroup-sizing-default">
+            Title
+          </InputGroup.Text>
+          <Form.Control
+            aria-label="Question title"
+            aria-describedby="inputGroup-sizing-default"
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+          />
+        </InputGroup>
+        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+        <Button variant="secondary" className="w-50" onClick={addQuestion}>
+          <i className="bi bi-plus-lg"></i> Add
+        </Button>
       </Container>
-    </Container>
+    </>
   );
 }
 

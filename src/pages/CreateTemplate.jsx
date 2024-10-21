@@ -1,14 +1,13 @@
 import NavbarForms from '../components/NavbarForms';
 import ImageUpload from '../components/ImageUpload';
+import AddQuestion from '../components/AddQuestion';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image';
 import OrangeImg from '../assets/orange.jpg';
-import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import InputGroup from 'react-bootstrap/InputGroup';
 import Badge from 'react-bootstrap/Badge';
 import { useForm } from 'react-hook-form';
 import axios from '../api/axios';
@@ -79,73 +78,12 @@ function CreateTemplate() {
               <ImageUpload onImageUpload={handleImageUpload} />
             </Col>
             <Col xs={12} md={8} lg={6}>
-              {uploadedImage ? (
-                <Image
-                  src={uploadedImage}
-                  thumbnail
-                  style={{ height: '150px', width: '100%' }}
-                />
-              ) : (
-                <Image
-                  src={OrangeImg}
-                  thumbnail
-                  style={{ height: '150px', width: '100%' }}
-                />
-              )}
-              <h3 className="mt-2">Questions</h3>
-              <Card className="mb-3">
-                <Card.Body>
-                  <div className="d-flex justify-content-end">
-                    <Button variant="danger" className="mb-3">
-                      <i className="bi bi-trash3-fill"></i>
-                    </Button>
-                  </div>
-                  <InputGroup className="mb-3">
-                    <InputGroup.Text id="inputGroup-sizing-default">
-                      Description
-                    </InputGroup.Text>
-                    <Form.Control
-                      aria-label="Question description"
-                      aria-describedby="inputGroup-sizing-default"
-                      {...register('questions.0.questionDescription')}
-                    />
-                  </InputGroup>
-                  <InputGroup className="mb-3">
-                    <InputGroup.Text id="inputGroup-sizing-default">
-                      Title
-                    </InputGroup.Text>
-                    <Form.Control
-                      aria-label="Question title"
-                      aria-describedby="inputGroup-sizing-default"
-                      {...register('questions.0.questionTitle')}
-                    />
-                  </InputGroup>
-                </Card.Body>
-              </Card>
-              <hr />
-              <Container className="text-center mb-3">
-                <Row>
-                  <Col>
-                    <Form.Label>Add another question</Form.Label>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12} md={8} lg={10}>
-                    <Form.Select
-                      aria-label="Question type select"
-                      {...register('questions.0.questionType')}
-                    >
-                      <option>Question type</option>
-                      <option value="text">Text</option>
-                    </Form.Select>
-                  </Col>
-                  <Col xs={12} md={3} lg={2}>
-                    <Button variant="secondary" className="w-100">
-                      <i className="bi bi-plus-lg"></i> Add
-                    </Button>
-                  </Col>
-                </Row>
-              </Container>
+              <Image
+                src={uploadedImage ? uploadedImage : OrangeImg}
+                thumbnail
+                style={{ height: '150px', width: '100%' }}
+              />
+              <AddQuestion />
             </Col>
             <Col xs={12} md={8} lg={3}>
               <Form.Group className="mb-3">
