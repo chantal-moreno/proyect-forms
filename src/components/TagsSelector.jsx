@@ -38,6 +38,7 @@ function TagsSelector({ onTagsChange }) {
         onChange={handleTagChange}
         options={options}
         value={selectedTags}
+        closeMenuOnSelect={false}
         placeholder="Select or create tags..."
       />
     </>
