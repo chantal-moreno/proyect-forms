@@ -2,6 +2,7 @@ import NavbarForms from '../components/NavbarForms';
 import ImageUpload from '../components/ImageUpload';
 import AddQuestion from '../components/AddQuestion';
 import TagsSelector from '../components/TagsSelector';
+import AllowedUsers from '../components/AllowedUsers';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -19,10 +20,17 @@ function CreateTemplate() {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm();
+    watch,
+  } = useForm({
+    defaultValues: {
+      isPublic: true,
+    },
+  });
   const [uploadedImage, setUploadedImage] = useState('');
   const [questions, setQuestions] = useState([]);
   const [tags, setTags] = useState([]);
+  const isPublic = watch('isPublic');
+  const [allowedUsers, setAllowedUsers] = useState([]);
 
   const handleImageUpload = (imageUrl) => {
     setUploadedImage(imageUrl);
@@ -42,6 +50,11 @@ function CreateTemplate() {
     setTags(newTags);
     setValue('tags', newTags);
     console.log(newTags);
+  };
+  const handleAllowedUsersChange = (newAllowedUsers) => {
+    setAllowedUsers(newAllowedUsers);
+    setValue('allowedUsers', newAllowedUsers);
+    console.log(newAllowedUsers);
   };
   const onSubmit = async (data) => {
     console.log(data);
@@ -123,8 +136,8 @@ function CreateTemplate() {
               </div>
               <div className="mb-3 text-center">
                 <p className="">
-                  This form will be public unless you want it to be private, so
-                  only certain users can access it.
+                  This template will be public unless you want it to be private,
+                  so only certain users can access it.
                 </p>
                 <Form.Group>
                   <Form.Check
@@ -147,6 +160,11 @@ function CreateTemplate() {
                     {...register('isPublic')}
                   />
                 </Form.Group>
+                {!JSON.parse(isPublic) && (
+                  <AllowedUsers
+                    onAllowedUsersChange={handleAllowedUsersChange}
+                  />
+                )}
               </div>
               <Button variant="secondary" type="submit" className="w-100">
                 Submit
