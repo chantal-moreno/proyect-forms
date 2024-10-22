@@ -86,7 +86,6 @@ function AddQuestion({ onQuestionsChange }) {
       setQuestions(updatedQuestions);
       onQuestionsChange(updatedQuestions);
 
-      // return arrayMove(questions, originalPosition, newPosition);
       return updatedQuestions;
     });
   };

@@ -1,6 +1,7 @@
 import NavbarForms from '../components/NavbarForms';
 import ImageUpload from '../components/ImageUpload';
 import AddQuestion from '../components/AddQuestion';
+import TagsSelector from '../components/TagsSelector';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -8,7 +9,6 @@ import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image';
 import OrangeImg from '../assets/orange.jpg';
 import Button from 'react-bootstrap/Button';
-import Badge from 'react-bootstrap/Badge';
 import { useForm } from 'react-hook-form';
 import axios from '../api/axios';
 import { useState } from 'react';
@@ -22,6 +22,7 @@ function CreateTemplate() {
   } = useForm();
   const [uploadedImage, setUploadedImage] = useState('');
   const [questions, setQuestions] = useState([]);
+  const [tags, setTags] = useState([]);
 
   const handleImageUpload = (imageUrl) => {
     setUploadedImage(imageUrl);
@@ -37,7 +38,11 @@ function CreateTemplate() {
       setValue(`questions.${index}.order`, question.id);
     });
   };
-
+  const handleTagsChange = (newTags) => {
+    setTags(newTags);
+    setValue('tags', newTags);
+    console.log(newTags);
+  };
   const onSubmit = async (data) => {
     console.log(data);
     try {
@@ -114,18 +119,7 @@ function CreateTemplate() {
               </Form.Group>
               <div className="mb-3">
                 <p>Tags</p>
-                <Badge bg="primary">Primary</Badge>
-                <Badge bg="secondary">Secondary</Badge>
-                <Badge bg="success">Success</Badge>
-                <Badge bg="danger">Danger</Badge>
-                <Badge bg="warning" text="dark">
-                  Warning
-                </Badge>
-                <Badge bg="info">Info</Badge>
-                <Badge bg="light" text="dark">
-                  Light
-                </Badge>
-                <Badge bg="dark">Dark</Badge>
+                <TagsSelector onTagsChange={handleTagsChange} />
               </div>
               <div className="mb-3 text-center">
                 <p className="">
