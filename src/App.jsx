@@ -8,7 +8,7 @@ import ProtectedRoute from './ProtectedRoute';
 import Template from './pages/Template';
 import AllTemplates from './pages/AllTemplates';
 import CreateTemplate from './pages/CreateTemplate';
-import AddQuestion from './components/AddQuestion';
+import Search from './components/Search';
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
           <Route path="/template/:templateId" element={<Template />} />
           <Route path="/all-templates" element={<AllTemplates />} />
 
-          <Route path="/test" element={<AddQuestion />} />
+          <Route path="/test" element={<Search />} />
 
           <Route element={<ProtectedRoute />}>
             <Route path="/users-management" element={<UserManagment />} />

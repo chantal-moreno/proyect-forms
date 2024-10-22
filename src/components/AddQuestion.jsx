@@ -15,6 +15,7 @@ import { useState } from 'react';
 import Column from './Column';
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import PropTypes from 'prop-types';
+import { v4 as uuidv4 } from 'uuid';
 
 function AddQuestion({ onQuestionsChange }) {
   const [questions, setQuestions] = useState([]);
@@ -34,7 +35,7 @@ function AddQuestion({ onQuestionsChange }) {
     const updatedQuestions = [
       ...questions,
       {
-        id: questions.length + 1,
+        id: uuidv4(),
         description: newDescription,
         title: newTitle,
         type: newType,
@@ -49,12 +50,24 @@ function AddQuestion({ onQuestionsChange }) {
     setNewTitle('');
     setErrorMessage('');
   };
+
   const handleDeleteQuestion = (id) => {
     console.log(id);
     const updatedQuestions = questions.filter((question) => question.id !== id);
     setQuestions(updatedQuestions);
     onQuestionsChange(updatedQuestions);
   };
+
+  const handleUpdateQuestion = (id, newDescription, newTitle) => {
+    const updatedQuestions = questions.map((question) =>
+      question.id === id
+        ? { ...question, description: newDescription, title: newTitle }
+        : question
+    );
+    setQuestions(updatedQuestions);
+    onQuestionsChange(updatedQuestions);
+  };
+
   const getQuestionPosition = (id) => {
     return questions.findIndex((question) => question.id === id);
   };
@@ -94,7 +107,11 @@ function AddQuestion({ onQuestionsChange }) {
         onDragEnd={handleDragEnd}
         collisionDetection={closestCorners}
       >
-        <Column questions={questions} onDelete={handleDeleteQuestion} />
+        <Column
+          questions={questions}
+          onDelete={handleDeleteQuestion}
+          onUpdate={handleUpdateQuestion}
+        />
       </DndContext>
 
       <hr />
