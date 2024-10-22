@@ -1,4 +1,5 @@
 import Card from 'react-bootstrap/Card';
+import Stack from 'react-bootstrap/Stack';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
@@ -40,48 +41,59 @@ function Question({ id, description, title, type, onDelete, onUpdate }) {
 
   return (
     <>
-      <Card>
-        <Card.Body
+      <Stack direction="horizontal" gap={1} className="align-items-stretch">
+        <Card className="w-100">
+          <Card.Body>
+            <Stack direction="horizontal" gap={3}>
+              <p className="text-muted">Type: {type}</p>
+              <div className="ms-auto">
+                <Button
+                  variant="danger"
+                  className="mb-3"
+                  onClick={() => {
+                    onDelete(id);
+                  }}
+                >
+                  <i className="bi bi-trash3-fill"></i>
+                </Button>
+              </div>
+            </Stack>
+            <InputGroup className="mb-3">
+              <InputGroup.Text id="inputGroup-sizing-default">
+                Description
+              </InputGroup.Text>
+              <Form.Control
+                aria-label="Question description"
+                aria-describedby="inputGroup-sizing-default"
+                value={currentDescription}
+                onChange={handleDescriptionChange}
+              />
+            </InputGroup>
+            <InputGroup>
+              <InputGroup.Text id="inputGroup-sizing-default">
+                Title
+              </InputGroup.Text>
+              <Form.Control
+                aria-label="Question title"
+                aria-describedby="inputGroup-sizing-default"
+                value={currentTitle}
+                onChange={handleTitleChange}
+              />
+            </InputGroup>
+          </Card.Body>
+        </Card>
+        <div className="vr" />
+        <Button
+          variant="outline-secondary"
           ref={setNodeRef}
           {...attributes}
           {...listeners}
           style={style}
+          className="flex-grow-1 d-flex align-items-center justify-content-center"
         >
-          <Form.Check disabled type="checkbox" label="test" />
-          <p className="text-muted">Type: {type}</p>
-          <InputGroup className="mb-3">
-            <InputGroup.Text id="inputGroup-sizing-default">
-              Description
-            </InputGroup.Text>
-            <Form.Control
-              aria-label="Question description"
-              aria-describedby="inputGroup-sizing-default"
-              value={currentDescription}
-              onChange={handleDescriptionChange}
-            />
-          </InputGroup>
-          <InputGroup>
-            <InputGroup.Text id="inputGroup-sizing-default">
-              Title
-            </InputGroup.Text>
-            <Form.Control
-              aria-label="Question title"
-              aria-describedby="inputGroup-sizing-default"
-              value={currentTitle}
-              onChange={handleTitleChange}
-            />
-          </InputGroup>
-        </Card.Body>
-        <Button
-          variant="danger"
-          className="m-1"
-          onClick={() => {
-            onDelete(id);
-          }}
-        >
-          <i className="bi bi-trash3-fill"></i>
+          <i className="bi bi-arrow-down-up"></i>
         </Button>
-      </Card>
+      </Stack>
     </>
   );
 }
