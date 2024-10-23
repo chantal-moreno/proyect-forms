@@ -9,8 +9,10 @@ import NavbarForms from '../components/NavbarForms';
 import { useEffect, useState } from 'react';
 import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/useAuth';
 
 function UserManagment() {
+  const { user, signout } = useAuth();
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertVariant, setAlertVariant] = useState('');
@@ -55,15 +57,18 @@ function UserManagment() {
       const res = await axios.put('/block-users', {
         userIds: selectedUsers,
       });
-      console.log(res.data.message);
+      if (selectedUsers.includes(user.id)) {
+        signout();
+        navigate('/sign-in');
+      }
       // Show Alert
-      setAlertMessage('Users blocked successfully!');
+      setAlertMessage(res.data.message);
       setAlertVariant('success');
       setShowAlert(true);
       // Refresh users
       await fetchAllUsers();
     } catch (error) {
-      console.error(error.response);
+      console.warn(error.response);
       // Show Alert
       setAlertMessage('Error blocking users');
       setAlertVariant('danger');
@@ -75,14 +80,13 @@ function UserManagment() {
       const res = await axios.put('/unblock-users', {
         userIds: selectedUsers,
       });
-      console.log(res.data.message);
-      setAlertMessage('Users unblocked successfully!');
+      setAlertMessage(res.data.message);
       setAlertVariant('success');
       setShowAlert(true);
       // Refresh users
       await fetchAllUsers();
     } catch (error) {
-      console.error(error.response);
+      console.warn(error.response);
       setAlertMessage('Error unblocking users');
       setAlertVariant('danger');
       setShowAlert(true);
@@ -93,14 +97,17 @@ function UserManagment() {
       const res = await axios.delete('/delete-users', {
         data: { userIds: selectedUsers },
       });
-      console.log(res.data.message);
-      setAlertMessage('Users deleted successfully!');
+      if (selectedUsers.includes(user.id)) {
+        signout();
+        navigate('/sign-in');
+      }
+      setAlertMessage(res.data.message);
       setAlertVariant('success');
       setShowAlert(true);
       // Refresh users
       await fetchAllUsers();
     } catch (error) {
-      console.error(error.response);
+      console.warn(error.response);
       setAlertMessage('Error deleting users');
       setAlertVariant('danger');
       setShowAlert(true);
@@ -111,14 +118,13 @@ function UserManagment() {
       const res = await axios.put('/add-admins', {
         userIds: selectedUsers,
       });
-      console.log(res.data.message);
-      setAlertMessage('New Admins added successfully!');
+      setAlertMessage(res.data.message);
       setAlertVariant('success');
       setShowAlert(true);
       // Refresh users
       await fetchAllUsers();
     } catch (error) {
-      console.error(error.response);
+      console.warn(error.response);
       setAlertMessage('Error adding Admins');
       setAlertVariant('danger');
       setShowAlert(true);
@@ -129,13 +135,12 @@ function UserManagment() {
       const res = await axios.put('/remove-admins', {
         userIds: selectedUsers,
       });
-      console.log(res.data.message);
-      setAlertMessage('Admins removed successfully!');
+      setAlertMessage(res.data.message);
       setShowAlert(true);
       // Refresh users
       await fetchAllUsers();
     } catch (error) {
-      console.error(error.response);
+      console.warn(error.response);
       setAlertMessage('Error removing Admins');
       setAlertVariant('danger');
       setShowAlert(true);
