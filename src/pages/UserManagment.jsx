@@ -23,16 +23,21 @@ function UserManagment() {
 
   const fetchAllUsers = async () => {
     try {
-      const res = await axios.get('/all-users');
-      //Change lastLogin date format
-      const formattedUsers = res.data.users.map((user) => ({
-        ...user,
-        lastLogin: new Date(user.lastLogin).toLocaleString(),
-      }));
-      setUsers(formattedUsers);
-    } catch (error) {
+      if (user.role === 'admin') {
+        const res = await axios.get('/all-users');
+        //Change lastLogin date format
+        const formattedUsers = res.data.users.map((user) => ({
+          ...user,
+          lastLogin: new Date(user.lastLogin).toLocaleString(),
+        }));
+        setUsers(formattedUsers);
+      }
       setShowModal(true);
-      console.log(error.response);
+    } catch (error) {
+      console.warn(error.response);
+      setAlertMessage('Something went wrong');
+      setAlertVariant('danger');
+      setShowAlert(true);
     }
   };
   useEffect(() => {

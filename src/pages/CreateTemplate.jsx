@@ -31,10 +31,7 @@ function CreateTemplate() {
     },
   });
   const [uploadedImage, setUploadedImage] = useState('');
-  const [questions, setQuestions] = useState([]);
-  const [tags, setTags] = useState([]);
   const isPublic = watch('isPublic');
-  const [allowedUsers, setAllowedUsers] = useState([]);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -46,8 +43,6 @@ function CreateTemplate() {
     setValue('image', imageUrl);
   };
   const handleQuestionsChange = (updatedQuestions) => {
-    setQuestions(updatedQuestions);
-    console.log(updatedQuestions);
     updatedQuestions.forEach((question, index) => {
       setValue(`questions.${index}.title`, question.title);
       setValue(`questions.${index}.description`, question.description);
@@ -56,14 +51,10 @@ function CreateTemplate() {
     });
   };
   const handleTagsChange = (newTags) => {
-    setTags(newTags);
     setValue('tags', newTags);
-    console.log(newTags);
   };
   const handleAllowedUsersChange = (newAllowedUsers) => {
-    setAllowedUsers(newAllowedUsers);
     setValue('allowedUsers', newAllowedUsers);
-    console.log(newAllowedUsers);
   };
   const onSubmit = async (data) => {
     console.log(data);
