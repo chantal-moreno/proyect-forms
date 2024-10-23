@@ -3,6 +3,7 @@ import ImageUpload from '../components/ImageUpload';
 import AddQuestion from '../components/AddQuestion';
 import TagsSelector from '../components/TagsSelector';
 import AllowedUsers from '../components/AllowedUsers';
+import DynamicModal from '../components/DynamicModal';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -10,9 +11,12 @@ import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image';
 import OrangeImg from '../assets/orange.jpg';
 import Button from 'react-bootstrap/Button';
+import Stack from 'react-bootstrap/Stack';
+import Alert from 'react-bootstrap/Alert';
 import { useForm } from 'react-hook-form';
 import axios from '../api/axios';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function CreateTemplate() {
   const {
@@ -31,6 +35,11 @@ function CreateTemplate() {
   const [tags, setTags] = useState([]);
   const isPublic = watch('isPublic');
   const [allowedUsers, setAllowedUsers] = useState([]);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleImageUpload = (imageUrl) => {
     setUploadedImage(imageUrl);
@@ -59,20 +68,26 @@ function CreateTemplate() {
   const onSubmit = async (data) => {
     console.log(data);
     try {
-      const res = await axios.post('/new-template', data);
-      console.log(res.data);
+      await axios.post('/new-template', data);
+      setShowSuccessModal(true);
     } catch (error) {
-      console.error('Error creating template:', error);
+      if (error.status == 400) {
+        setAlertMessage(error.response.data.message);
+        setShowAlert(true);
+      } else {
+        console.warn('Error creating template:', error);
+        setShowErrorModal(true);
+      }
     }
   };
   return (
     <>
       <NavbarForms />
       <Container className="mt-5">
-        <h1>New Template</h1>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Row className="mt-3">
-            <Col xs={12} md={8} lg={3}>
+            <h1>New Template</h1>
+            <Col sm={12} lg={3}>
               <Form.Group
                 className="mb-3"
                 controlId="TemplateForm.ControlInput1"
@@ -107,15 +122,15 @@ function CreateTemplate() {
               </Form.Group>
               <ImageUpload onImageUpload={handleImageUpload} />
             </Col>
-            <Col xs={12} md={8} lg={6}>
+            <Col sm={12} lg={6}>
               <Image
                 src={uploadedImage ? uploadedImage : OrangeImg}
                 thumbnail
-                style={{ height: '150px', width: '100%' }}
+                style={{ height: '150px', width: '100%', objectFit: 'cover' }}
               />
               <AddQuestion onQuestionsChange={handleQuestionsChange} />
             </Col>
-            <Col xs={12} md={8} lg={3}>
+            <Col sm={12} lg={3}>
               <Form.Group className="mb-3">
                 <Form.Label>Template Topic</Form.Label>
                 <Form.Select
@@ -134,8 +149,8 @@ function CreateTemplate() {
                 <p>Tags</p>
                 <TagsSelector onTagsChange={handleTagsChange} />
               </div>
-              <div className="mb-3 text-center">
-                <p className="">
+              <div className="mb-5 text-center">
+                <p className="mt-4">
                   This template will be public unless you want it to be private,
                   so only certain users can access it.
                 </p>
@@ -166,13 +181,45 @@ function CreateTemplate() {
                   />
                 )}
               </div>
-              <Button variant="secondary" type="submit" className="w-100">
-                Submit
-              </Button>
+              <Stack direction="horizontal" gap={2}>
+                <Button variant="secondary" type="submit" className="mb-3 w-50">
+                  Submit
+                </Button>
+                <Button
+                  variant="outline-danger"
+                  className="mb-3 w-50"
+                  onClick={() => navigate('/all-templates')}
+                >
+                  Cancel
+                </Button>
+              </Stack>
+              {showAlert && (
+                <Alert variant="danger" onClose={() => setShowAlert(false)}>
+                  {alertMessage}
+                </Alert>
+              )}
             </Col>
           </Row>
         </Form>
       </Container>
+
+      {/* Success */}
+      <DynamicModal
+        show={showSuccessModal}
+        handleClose={() => {
+          setShowSuccessModal(false);
+          navigate('/home-page');
+        }}
+        title="Success"
+        body="Template created successfully!"
+      />
+      {/* Error */}
+      <DynamicModal
+        show={showErrorModal}
+        handleClose={() => setShowErrorModal(false)}
+        title="Error"
+        body="There was an error creating your template. Please try again."
+      />
     </>
   );
 }
