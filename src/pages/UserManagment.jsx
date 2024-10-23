@@ -23,7 +23,7 @@ function UserManagment() {
 
   const fetchAllUsers = async () => {
     try {
-      if (user.role === 'admin') {
+      if (user.role == 'admin') {
         const res = await axios.get('/all-users');
         //Change lastLogin date format
         const formattedUsers = res.data.users.map((user) => ({
@@ -31,8 +31,9 @@ function UserManagment() {
           lastLogin: new Date(user.lastLogin).toLocaleString(),
         }));
         setUsers(formattedUsers);
+      } else {
+        setShowModal(true);
       }
-      setShowModal(true);
     } catch (error) {
       console.warn(error.response);
       setAlertMessage('Something went wrong');
