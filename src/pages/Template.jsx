@@ -8,22 +8,18 @@ import Alert from 'react-bootstrap/Alert';
 import Stack from 'react-bootstrap/Stack';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
-import Modal from 'react-bootstrap/Modal';
 import Badge from 'react-bootstrap/Badge';
 import OrangeImg from '../assets/orange.jpg';
 import NavbarForms from '../components/NavbarForms';
-import { useParams, Link } from 'react-router-dom';
+import DynamicModal from '../components/DynamicModal';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from '../api/axios';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../context/useAuth';
 
 function Template() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit } = useForm();
   const { user } = useAuth();
   const { templateId } = useParams();
   const [template, setTemplate] = useState(null);
@@ -31,6 +27,9 @@ function Template() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTemplate = async () => {
@@ -51,8 +50,6 @@ function Template() {
 
     fetchTemplate();
   }, [templateId, readOnly]);
-
-  const handleCloseModal = () => setShowModal(false);
 
   if (error) {
     return (
@@ -84,8 +81,10 @@ function Template() {
         responses: data,
       });
       console.log('Responses saved:', res.data);
+      setShowSuccessModal(true);
     } catch (error) {
       console.error('Error saving responses:', error);
+      setShowErrorModal(true);
     }
   };
 
@@ -104,7 +103,7 @@ function Template() {
             <Image
               src={template.image ? template.image : OrangeImg}
               thumbnail
-              style={{ height: '150px', width: '100%' }}
+              style={{ height: '150px', width: '100%', objectFit: 'cover' }}
             />
             <h4>Questions</h4>
             <Form onSubmit={handleSubmit(onSubmit)}>
@@ -163,20 +162,36 @@ function Template() {
         </Row>
       </Container>
 
-      <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Read-Only Mode</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          This template is in read-only mode. If you want to answer it you need
-          to <Link to="/"> Sign Up</Link> or <Link to="/sign-in">Sign In</Link>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {/* ReadOnly */}
+      <DynamicModal
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+        title="Read-Only Mode"
+        body={
+          <>
+            This template is in read-only mode. If you want to answer it you
+            need to <Link to="/">Sign Up</Link> or{' '}
+            <Link to="/sign-in">Sign In</Link>.
+          </>
+        }
+      />
+      {/* Success */}
+      <DynamicModal
+        show={showSuccessModal}
+        handleClose={() => {
+          setShowSuccessModal(false);
+          navigate('/home-page');
+        }}
+        title="Success"
+        body="Your answers were submitted successfully!"
+      />
+      {/* Error */}
+      <DynamicModal
+        show={showErrorModal}
+        handleClose={() => setShowErrorModal(false)}
+        title="Error"
+        body="There was an error submitting your answers. Please try again."
+      />
     </>
   );
 }
