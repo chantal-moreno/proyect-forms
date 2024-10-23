@@ -15,10 +15,19 @@ import NavbarForms from '../components/NavbarForms';
 import { useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from '../api/axios';
+import { useForm } from 'react-hook-form';
+import { useAuth } from '../context/useAuth';
 
 function Template() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const { user } = useAuth();
   const { templateId } = useParams();
   const [template, setTemplate] = useState(null);
+  const [readOnly, setReadOnly] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -27,9 +36,10 @@ function Template() {
     const fetchTemplate = async () => {
       try {
         const res = await axios.get(`/template/${templateId}`);
-        setTemplate(res.data);
+        setTemplate(res.data.template);
+        setReadOnly(res.data.readOnly);
         setLoading(false);
-        if (res.data.readOnly) {
+        if (readOnly) {
           setShowModal(true);
         }
       } catch (err) {
@@ -40,7 +50,7 @@ function Template() {
     };
 
     fetchTemplate();
-  }, [templateId]);
+  }, [templateId, readOnly]);
 
   const handleCloseModal = () => setShowModal(false);
 
@@ -65,70 +75,90 @@ function Template() {
       </>
     );
   }
-  console.log(template);
+  const onSubmit = async (data) => {
+    console.log(data);
+    try {
+      const res = await axios.post(`/template/${templateId}/submit-answers`, {
+        templateId,
+        userId: user.id,
+        responses: data,
+      });
+      console.log('Responses saved:', res.data);
+    } catch (error) {
+      console.error('Error saving responses:', error);
+    }
+  };
+
   return (
     <>
       <NavbarForms />
       <Container className="mt-5">
         <Row>
           <Col xs={12} md={8} lg={3}>
-            <h2>{`Title: ${template.template.title}`}</h2>
+            <h2>{template.title}</h2>
             <h4>Description:</h4>
-            <p className="text-muted">{template.template.description}</p>
+            <p className="text-muted">{template.description}</p>
+            <p>{`Topic: ${template.topic}`}</p>
           </Col>
           <Col xs={12} md={8} lg={6}>
-            {template.template.image ? (
-              <Image
-                src={template.template.image}
-                thumbnail
-                style={{ height: '150px', width: '100%' }}
-              />
-            ) : (
-              <Image
-                src={OrangeImg}
-                thumbnail
-                style={{ height: '150px', width: '100%' }}
-              />
-            )}
+            <Image
+              src={template.image ? template.image : OrangeImg}
+              thumbnail
+              style={{ height: '150px', width: '100%' }}
+            />
             <h4>Questions</h4>
-            <Stack gap={1} className="mx-auto">
-              {template.template?.questions?.map((question, index) => (
-                <Card key={index} className="mb-3">
-                  <Card.Body>
-                    <Form>
+            <Form onSubmit={handleSubmit(onSubmit)}>
+              <Stack gap={1} className="mx-auto">
+                {template.questions?.map((question, index) => (
+                  <Card key={index} className="mb-3">
+                    <Card.Body>
                       <Form.Group className="mb-3">
-                        <Form.Label>{question.questionTitle}</Form.Label>
+                        <Form.Label>{question.title}</Form.Label>
                         <Form.Control
-                          type="text"
+                          as={
+                            question.type === 'textarea' ? 'textarea' : 'input'
+                          }
+                          type={
+                            question.type !== 'textarea'
+                              ? question.type
+                              : undefined
+                          }
                           placeholder="Enter your answer"
                           required
-                          readOnly={template.readOnly === true}
+                          disabled={readOnly === true}
+                          {...register(`answers.${index}.answerText`, {
+                            required: true,
+                          })}
+                        />
+                        <input
+                          type="hidden"
+                          value={question._id}
+                          {...register(`answers.${index}.questionId`)}
                         />
                         <Form.Text className="text-muted">
-                          {question.questionDescription}
+                          {question.description}
                         </Form.Text>
                       </Form.Group>
-                    </Form>
-                  </Card.Body>
-                </Card>
-              ))}
-            </Stack>
-            <Button variant="secondary" type="submit">
-              Submit
-            </Button>
+                    </Card.Body>
+                  </Card>
+                ))}
+              </Stack>
+              <Button variant="secondary" type="submit">
+                Submit
+              </Button>
+            </Form>
           </Col>
           <Col xs={12} md={8} lg={3}>
-            <p>{`Topic: ${template.template.topic}`}</p>
-
             <p>Tags:</p>
             <Stack direction="horizontal" gap={2}>
-              {template.template.tags.map((tag, index) => (
+              {template.tags.map((tag, index) => (
                 <Badge bg="secondary" key={index}>
-                  {tag}
+                  {tag.name}
                 </Badge>
               ))}
             </Stack>
-            <p>social</p>
+            <p>like</p>
+            <p>comments</p>
           </Col>
         </Row>
       </Container>
