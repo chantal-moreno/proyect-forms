@@ -76,7 +76,9 @@ function TemplateForm() {
       <>
         <NavbarForms />
         <Container className="mt-5">
-          <Alert variant="danger">{error}</Alert>
+          <Alert variant="danger" className="text-center">
+            {error} - <Link to="/home-page">Go back</Link>
+          </Alert>
         </Container>
       </>
     );
