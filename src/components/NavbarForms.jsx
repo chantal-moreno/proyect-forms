@@ -33,36 +33,15 @@ function NavbarForms() {
             <Nav className="me-auto">
               <Nav.Link href="#home-page">Home</Nav.Link>
               <Nav.Link href="#all-templates">Templates</Nav.Link>
-              <Nav.Link href="#link">Forms</Nav.Link>
             </Nav>
-            {/* <Nav className="me-auto">
-              <InputGroup xs="auto">
-                <Form.Control
-                  placeholder="Search"
-                  aria-label="Search"
-                  aria-describedby="basic-addon2"
-                />
-                <Button
-                  variant="outline-secondary"
-                  type="submit"
-                  id="button-addon2"
-                >
-                  <i className="bi bi-search"></i>
-                </Button>
-              </InputGroup>
-            </Nav> */}
             <NavDropdown
               title={<i className="bi bi-gear-fill"></i>}
               id="basic-nav-dropdown"
             >
-              <NavDropdown.Item href="#action/3.2">Language</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Dark Mode</NavDropdown.Item>
-              {isAuthenticated ? (
+              {isAuthenticated && (
                 <NavDropdown.Item onClick={handleUsersManagement}>
                   Users Managment
                 </NavDropdown.Item>
-              ) : (
-                <></>
               )}
               <NavDropdown.Divider />
               {isAuthenticated ? (
