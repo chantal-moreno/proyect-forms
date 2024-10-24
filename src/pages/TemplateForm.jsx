@@ -76,7 +76,7 @@ function TemplateForm() {
       const res = await axios.post(`/template/${templateId}/submit-answers`, {
         templateId,
         userId: user.id,
-        responses: data,
+        answers: data.answers,
       });
       console.log('Responses saved:', res.data);
       setShowSuccessModal(true);
