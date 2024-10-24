@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form';
 import { useAuth } from '../context/useAuth';
 
 function TemplateForm() {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const { user } = useAuth();
   const { templateId } = useParams();
   const [template, setTemplate] = useState(null);
@@ -30,13 +30,32 @@ function TemplateForm() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchTemplate = async () => {
+    const fetchTemplateAndResponses = async () => {
       try {
-        const res = await axios.get(`/template/${templateId}`);
-        setTemplate(res.data.template);
-        setReadOnly(res.data.readOnly);
+        // Get Template
+        const templateRes = await axios.get(`/template/${templateId}`);
+        setTemplate(templateRes.data.template);
+        setReadOnly(templateRes.data.readOnly);
         setLoading(false);
-        if (readOnly) {
+
+        if (user) {
+          const answersRes = await axios.get(
+            `/templates/${templateId}/user-form-responses`
+          );
+          if (answersRes.data.answers) {
+            const prefilledAnswers = answersRes.data.answers.reduce(
+              (acc, answer, index) => {
+                acc[`answers.${index}.answerText`] = answer.answerText;
+                acc[`answers.${index}.questionId`] = answer.questionId;
+                return acc;
+              },
+              {}
+            );
+            reset(prefilledAnswers); //Fill template with answers
+          }
+        }
+
+        if (templateRes.data.readOnly) {
           setShowModal(true);
         }
       } catch (err) {
@@ -46,8 +65,8 @@ function TemplateForm() {
       }
     };
 
-    fetchTemplate();
-  }, [templateId, readOnly]);
+    fetchTemplateAndResponses();
+  }, [templateId, user, reset]);
 
   if (error) {
     return (
