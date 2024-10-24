@@ -2,9 +2,9 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import InputGroup from 'react-bootstrap/InputGroup';
+// import Form from 'react-bootstrap/Form';
+// import Button from 'react-bootstrap/Button';
+// import InputGroup from 'react-bootstrap/InputGroup';
 import Logo from '../assets/logo.svg';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
@@ -35,7 +35,7 @@ function NavbarForms() {
               <Nav.Link href="#all-templates">Templates</Nav.Link>
               <Nav.Link href="#link">Forms</Nav.Link>
             </Nav>
-            <Nav className="me-auto">
+            {/* <Nav className="me-auto">
               <InputGroup xs="auto">
                 <Form.Control
                   placeholder="Search"
@@ -50,7 +50,7 @@ function NavbarForms() {
                   <i className="bi bi-search"></i>
                 </Button>
               </InputGroup>
-            </Nav>
+            </Nav> */}
             <NavDropdown
               title={<i className="bi bi-gear-fill"></i>}
               id="basic-nav-dropdown"
@@ -65,14 +65,21 @@ function NavbarForms() {
                 <></>
               )}
               <NavDropdown.Divider />
-              <NavDropdown.Item
-                href="#sign-in"
-                onClick={() => {
-                  signout();
-                }}
-              >
-                Sign Out
-              </NavDropdown.Item>
+              {isAuthenticated ? (
+                <NavDropdown.Item
+                  href="#sign-in"
+                  onClick={() => {
+                    signout();
+                  }}
+                >
+                  Sign Out
+                </NavDropdown.Item>
+              ) : (
+                <>
+                  <NavDropdown.Item href="#sign-up">Sign Up</NavDropdown.Item>
+                  <NavDropdown.Item href="#sign-in">Sign In</NavDropdown.Item>
+                </>
+              )}
             </NavDropdown>
           </Navbar.Collapse>
         </Container>
