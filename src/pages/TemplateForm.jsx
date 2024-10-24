@@ -1,6 +1,4 @@
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
 import Spinner from 'react-bootstrap/Spinner';
@@ -18,7 +16,7 @@ import axios from '../api/axios';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../context/useAuth';
 
-function Template() {
+function TemplateForm() {
   const { register, handleSubmit } = useForm();
   const { user } = useAuth();
   const { templateId } = useParams();
@@ -87,79 +85,80 @@ function Template() {
       setShowErrorModal(true);
     }
   };
-
   return (
     <>
       <NavbarForms />
       <Container className="mt-5 bg-light p-0">
-        <Row>
-          <Col sm={12} lg={3}>
-            <h2>{template.title}</h2>
-            <h4>Description:</h4>
-            <p className="text-muted">{template.description}</p>
-            <p>{`Topic: ${template.topic}`}</p>
-          </Col>
-          <Col ss={12} lg={6}>
-            <Image
-              src={template.image ? template.image : OrangeImg}
-              thumbnail
-              style={{ height: '150px', width: '100%', objectFit: 'cover' }}
-            />
-            <h4>Questions</h4>
-            <Form onSubmit={handleSubmit(onSubmit)}>
-              <Stack gap={1} className="mx-auto">
-                {template.questions?.map((question, index) => (
-                  <Card key={index} className="mb-3">
-                    <Card.Body>
-                      <Form.Group className="mb-3">
-                        <Form.Label>{question.title}</Form.Label>
-                        <Form.Control
-                          as={
-                            question.type === 'textarea' ? 'textarea' : 'input'
-                          }
-                          type={
-                            question.type !== 'textarea'
-                              ? question.type
-                              : undefined
-                          }
-                          placeholder="Enter your answer"
-                          required
-                          disabled={readOnly === true}
-                          {...register(`answers.${index}.answerText`, {
-                            required: true,
-                          })}
-                        />
-                        <input
-                          type="hidden"
-                          value={question._id}
-                          {...register(`answers.${index}.questionId`)}
-                        />
-                        <Form.Text className="text-muted">
-                          {question.description}
-                        </Form.Text>
-                      </Form.Group>
-                    </Card.Body>
-                  </Card>
-                ))}
-              </Stack>
-              <Button variant="secondary" type="submit">
-                Submit
-              </Button>
-            </Form>
-          </Col>
-          <Col sm={12} lg={3}>
-            <p>Tags:</p>
-            <Stack direction="horizontal" gap={2}>
-              {template.tags.map((tag, index) => (
-                <Badge bg="secondary" key={index}>
-                  {tag.name}
-                </Badge>
+        <Image
+          src={template.image ? template.image : OrangeImg}
+          thumbnail
+          style={{ height: '150px', width: '100%', objectFit: 'cover' }}
+        />
+        <div className="p-3">
+          <h2>{template.title}</h2>
+          <p className="text-muted">
+            {template.topic} - {template.description}
+          </p>
+          <Stack direction="horizontal" gap={2} className="mb-3">
+            {template.tags.map((tag, index) => (
+              <Badge bg="secondary" key={index}>
+                {tag.name}
+              </Badge>
+            ))}
+          </Stack>
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <Stack gap={1} className="mx-auto">
+              {template.questions?.map((question, index) => (
+                <Card key={index} className="mb-3">
+                  <Card.Body>
+                    <Form.Group className="mb-3">
+                      <Form.Label>{question.title}</Form.Label>
+                      <Form.Control
+                        as={question.type === 'textarea' ? 'textarea' : 'input'}
+                        type={
+                          question.type !== 'textarea'
+                            ? question.type
+                            : undefined
+                        }
+                        placeholder="Enter your answer"
+                        required
+                        disabled={readOnly === true}
+                        {...register(`answers.${index}.answerText`, {
+                          required: true,
+                        })}
+                      />
+                      <input
+                        type="hidden"
+                        value={question._id}
+                        {...register(`answers.${index}.questionId`)}
+                      />
+                      <Form.Text className="text-muted">
+                        {question.description}
+                      </Form.Text>
+                    </Form.Group>
+                  </Card.Body>
+                </Card>
               ))}
             </Stack>
-            <p>like</p>
-            <p>comments</p>
-          </Col>
-        </Row>
+            <Stack direction="horizontal" gap={2}>
+              <Button
+                variant="outline-danger"
+                className="mb-3 w-50"
+                onClick={() => navigate('/home-page')}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="secondary"
+                disabled={readOnly === true}
+                type="submit"
+                className="mb-3 w-50"
+              >
+                Submit
+              </Button>
+            </Stack>
+          </Form>
+        </div>
       </Container>
 
       {/* ReadOnly */}
@@ -196,4 +195,4 @@ function Template() {
   );
 }
 
-export default Template;
+export default TemplateForm;
