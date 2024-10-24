@@ -6,7 +6,11 @@ function HomePage() {
     <>
       <NavbarForms />
       <TagCloud />
-      <TemplateList fetchURL="/latest-templates" title="Latest Templates" />
+      <TemplateList
+        fetchURL="/latest-templates"
+        title="Latest Templates"
+        rowLimit={5}
+      />
     </>
   );
 }

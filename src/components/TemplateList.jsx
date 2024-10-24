@@ -6,26 +6,35 @@ import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-function TemplateList({ fetchURL, title }) {
+function TemplateList({ fetchURL, title, rowLimit }) {
   const [templates, setTemplates] = useState([]);
   const navigate = useNavigate();
 
-  const fetchTemplates = async () => {
-    try {
-      const res = await axios.get(fetchURL);
-      const templates = res.data.templates;
-      setTemplates(templates);
-    } catch (error) {
-      console.log(error.response);
-    }
-  };
   useEffect(() => {
+    const fetchTemplates = async () => {
+      try {
+        const res = await axios.get(fetchURL);
+        const templates = res.data.templates;
+        setTemplates(templates);
+      } catch (error) {
+        console.log(error.response);
+      }
+    };
+
     fetchTemplates();
   }, [fetchURL]);
 
   const handleOpenTemplate = (templateId) => {
     navigate(`/template/${templateId}`);
   };
+
+  const truncateDescription = (description, maxLength) => {
+    if (description.length > maxLength) {
+      return description.slice(0, maxLength) + '...';
+    }
+    return description;
+  };
+
   return (
     <Container className="mt-5">
       <h1>{title}</h1>
@@ -39,13 +48,15 @@ function TemplateList({ fetchURL, title }) {
           </tr>
         </thead>
         <tbody>
-          {templates.map((template) => (
+          {templates.slice(0, rowLimit || templates.length).map((template) => (
             <tr key={template._id}>
-              <td>{template.title}</td>
-              <td>{template.description}</td>
-              <td>{template.topic}</td>
-              <td>{`${template.createdBy.firstName} ${template.createdBy.lastName}`}</td>
-              <td>
+              <td className="align-middle">{template.title}</td>
+              <td className="align-middle">
+                {truncateDescription(template.description, 100)}
+              </td>
+              <td className="align-middle">{template.topic}</td>
+              <td className="align-middle">{`${template.createdBy.firstName} ${template.createdBy.lastName}`}</td>
+              <td className="align-middle">
                 <Button
                   variant="secondary"
                   size="sm"
@@ -65,6 +76,7 @@ function TemplateList({ fetchURL, title }) {
 TemplateList.propTypes = {
   fetchURL: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
+  rowLimit: PropTypes.number,
 };
 
 export default TemplateList;

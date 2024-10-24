@@ -42,9 +42,9 @@ function Template() {
           setShowModal(true);
         }
       } catch (err) {
-        setError('Something went wrong');
+        console.log(err.response.data);
         setLoading(false);
-        console.log(err);
+        setError(err.response.data.error);
       }
     };
 
