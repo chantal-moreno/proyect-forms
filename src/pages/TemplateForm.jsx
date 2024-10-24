@@ -27,6 +27,7 @@ function TemplateForm() {
   const [showModal, setShowModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,11 +39,13 @@ function TemplateForm() {
         setReadOnly(templateRes.data.readOnly);
         setLoading(false);
 
+        //User authenticated get answers
         if (user) {
           const answersRes = await axios.get(
             `/templates/${templateId}/user-form-responses`
           );
           if (answersRes.data.answers) {
+            setIsUpdating(true);
             const prefilledAnswers = answersRes.data.answers.reduce(
               (acc, answer, index) => {
                 acc[`answers.${index}.answerText`] = answer.answerText;
@@ -92,11 +95,23 @@ function TemplateForm() {
   const onSubmit = async (data) => {
     console.log(data);
     try {
-      const res = await axios.post(`/template/${templateId}/submit-answers`, {
-        templateId,
-        userId: user.id,
-        answers: data.answers,
-      });
+      let res;
+      if (isUpdating) {
+        //Update answers
+        res = await axios.put(`/templates/${templateId}/update-form-response`, {
+          templateId,
+          userId: user.id,
+          answers: data.answers,
+        });
+      } else {
+        //Submit answers first time
+        res = await axios.post(`/template/${templateId}/submit-answers`, {
+          templateId,
+          userId: user.id,
+          answers: data.answers,
+        });
+      }
+
       console.log('Responses saved:', res.data);
       setShowSuccessModal(true);
     } catch (error) {
