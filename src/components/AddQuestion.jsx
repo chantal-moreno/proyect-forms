@@ -116,28 +116,6 @@ function AddQuestion({ onQuestionsChange }) {
       <hr />
       <Container className="text-center mb-3">
         <Form.Label>Add question</Form.Label>
-        <Form.Select
-          aria-label="Question type select"
-          value={newType}
-          onChange={(e) => setNewType(e.target.value)}
-          className="mb-3"
-        >
-          <option>Question type</option>
-          <option value="text">Single line text</option>
-          <option value="textarea">Multiple line text</option>
-          <option value="number">Single number</option>
-        </Form.Select>
-        <InputGroup className="mb-3">
-          <InputGroup.Text id="inputGroup-sizing-default">
-            Description
-          </InputGroup.Text>
-          <Form.Control
-            aria-label="Question description"
-            aria-describedby="inputGroup-sizing-default"
-            value={newDescription}
-            onChange={(e) => setNewDescription(e.target.value)}
-          />
-        </InputGroup>
         <InputGroup className="mb-3">
           <InputGroup.Text id="inputGroup-sizing-default">
             Title
@@ -149,6 +127,28 @@ function AddQuestion({ onQuestionsChange }) {
             onChange={(e) => setNewTitle(e.target.value)}
           />
         </InputGroup>
+        <InputGroup className="mb-3">
+          <InputGroup.Text id="inputGroup-sizing-default">
+            Description
+          </InputGroup.Text>
+          <Form.Control
+            aria-label="Question description"
+            aria-describedby="inputGroup-sizing-default"
+            value={newDescription}
+            onChange={(e) => setNewDescription(e.target.value)}
+          />
+        </InputGroup>
+        <Form.Select
+          aria-label="Question type select"
+          value={newType}
+          onChange={(e) => setNewType(e.target.value)}
+          className="mb-3"
+        >
+          <option>Question type</option>
+          <option value="text">Single line text</option>
+          <option value="textarea">Multiple line text</option>
+          <option value="number">Single number</option>
+        </Form.Select>
         {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
         <Button variant="secondary" className="w-50" onClick={addQuestion}>
           <i className="bi bi-plus-lg"></i> Add

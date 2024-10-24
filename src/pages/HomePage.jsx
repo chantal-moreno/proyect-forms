@@ -11,6 +11,11 @@ function HomePage() {
         title="Latest Templates"
         rowLimit={5}
       />
+      <TemplateList
+        fetchURL="/templates/by-answers-count"
+        title="Most Popular Templates"
+        rowLimit={5}
+      />
     </>
   );
 }
