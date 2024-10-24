@@ -2,10 +2,11 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import { useState, useEffect } from 'react';
 import axios from '../api/axios';
+import { useNavigate } from 'react-router-dom';
 
 function TagCloud() {
   const [options, setOptions] = useState([]);
-  const [templates, setTemplates] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -25,13 +26,8 @@ function TagCloud() {
     fetchTags();
   }, []);
 
-  const fetchTemplatesByTag = async (tagId) => {
-    try {
-      const res = await axios.get(`/templates/tag/${tagId}`);
-      setTemplates(res.data);
-    } catch (error) {
-      console.error('Error fetching templates:', error);
-    }
+  const handleTagClick = (tagId, tagName) => {
+    navigate(`/templates/tag/${tagId}`, { state: { tagName } });
   };
 
   return (
@@ -43,7 +39,7 @@ function TagCloud() {
             size="sm"
             key={tag.value}
             className="m-1"
-            onClick={() => fetchTemplatesByTag(tag.value)}
+            onClick={() => handleTagClick(tag.value, tag.label)}
           >
             {tag.label}
           </Button>
@@ -51,18 +47,6 @@ function TagCloud() {
       ) : (
         <p>No tags available</p>
       )}
-      <div className="mt-4">
-        <h4>Templates:</h4>
-        {templates.length > 0 ? (
-          <ul>
-            {templates.map((template) => (
-              <li key={template._id}>{template.title}</li>
-            ))}
-          </ul>
-        ) : (
-          <p>No templates for the selected tag</p>
-        )}
-      </div>
     </Container>
   );
 }

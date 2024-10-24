@@ -1,29 +1,24 @@
-import Select from 'react-select';
-import CreatableSelect from 'react-select/creatable';
-import { Container } from 'react-bootstrap';
-import { useState } from 'react';
+import NavbarForms from './NavbarForms';
+import TemplateList from './TemplateList';
+import Container from 'react-bootstrap/Container';
+import { useParams, useLocation } from 'react-router-dom';
 
 function Search() {
-  const [optionPicked, setOptionPicked] = useState('');
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'vanilla', label: 'Vanilla' },
-    { value: 'strawberry', label: 'Strawberry' },
-  ];
+  const { tagId } = useParams();
+  const location = useLocation();
+  const tagName = location.state?.tagName;
 
   return (
-    <Container>
-      <h1>React-select</h1>
-      <Select
-        options={options}
-        placeholder="Search"
-        onChange={(option) => setOptionPicked(option)}
-        isMulti
-        closeMenuOnSelect={false}
-      />
-      <p>{optionPicked.label}</p>
-      <CreatableSelect isMulti options={options} />
-    </Container>
+    <>
+      <NavbarForms />
+      <Container className="mt-5">
+        <div className="text-center">
+          <h5>Templates with the tag</h5>
+          <h1>{tagName}</h1>
+        </div>
+        <TemplateList fetchURL={`/templates/tag/${tagId}`} rowLimit={5} />
+      </Container>
+    </>
   );
 }
 

@@ -75,7 +75,7 @@ function TemplateList({ fetchURL, title, rowLimit }) {
 
 TemplateList.propTypes = {
   fetchURL: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   rowLimit: PropTypes.number,
 };
 

@@ -9,6 +9,7 @@ import TemplateForm from './pages/TemplateForm';
 import AllTemplates from './pages/AllTemplates';
 import CreateTemplate from './pages/CreateTemplate';
 import TagsSelector from './components/TagsSelector';
+import Search from './components/Search';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/home-page" element={<HomePage />} />
           <Route path="/template/:templateId" element={<TemplateForm />} />
           <Route path="/all-templates" element={<AllTemplates />} />
+          <Route path="/templates/tag/:tagId" element={<Search />} />
 
           <Route path="/test" element={<TagsSelector />} />
 
