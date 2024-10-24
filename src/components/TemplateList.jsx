@@ -17,7 +17,7 @@ function TemplateList({ fetchURL, title, rowLimit }) {
         const templates = res.data.templates;
         setTemplates(templates);
       } catch (error) {
-        console.log(error.response);
+        console.warn(error.response);
       }
     };
 

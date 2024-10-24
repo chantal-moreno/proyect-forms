@@ -52,7 +52,7 @@ function AddQuestion({ onQuestionsChange }) {
   };
 
   const handleDeleteQuestion = (id) => {
-    console.log(id);
+    // console.log(id);
     const updatedQuestions = questions.filter((question) => question.id !== id);
     setQuestions(updatedQuestions);
     onQuestionsChange(updatedQuestions);

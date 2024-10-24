@@ -57,7 +57,7 @@ function CreateTemplate() {
     setValue('allowedUsers', newAllowedUsers);
   };
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
     try {
       await axios.post('/new-template', data);
       setShowSuccessModal(true);

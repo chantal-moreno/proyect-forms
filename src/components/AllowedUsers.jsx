@@ -10,14 +10,14 @@ function AllowedUsers({ onAllowedUsersChange }) {
   const fetchAllUsers = async () => {
     try {
       const res = await axios.get('/all-users');
-      console.log(res.data);
+      // console.log(res.data);
       const users = res.data.users.map((user) => ({
         value: user._id,
         label: `${user.firstName} ${user.lastName} - ${user.email}`,
       }));
       setOptions(users);
     } catch (error) {
-      console.log(error.response);
+      console.warn(error.response);
     }
   };
   useEffect(() => {

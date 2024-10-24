@@ -11,14 +11,14 @@ function TagsSelector({ onTagsChange }) {
     const fetchTags = async () => {
       try {
         const res = await axios.get('/tags');
-        console.log(res.data);
+        // console.log(res.data);
         const tagOptions = res.data.map((tag) => ({
           value: tag._id,
           label: tag.name,
         }));
         setOptions(tagOptions);
       } catch (error) {
-        console.log(error.response);
+        console.warn(error.response);
       }
     };
 

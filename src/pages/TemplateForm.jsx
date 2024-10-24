@@ -62,7 +62,7 @@ function TemplateForm() {
           setShowModal(true);
         }
       } catch (err) {
-        console.log(err.response.data);
+        console.warn(err.response.data);
         setLoading(false);
         setError(err.response.data.error);
       }
@@ -95,7 +95,7 @@ function TemplateForm() {
     );
   }
   const onSubmit = async (data) => {
-    console.log(data);
+    // console.log(data);
     try {
       let res;
       if (isUpdating) {
@@ -117,7 +117,7 @@ function TemplateForm() {
       console.log('Responses saved:', res.data);
       setShowSuccessModal(true);
     } catch (error) {
-      console.error('Error saving responses:', error);
+      console.warn('Error saving responses:', error);
       setShowErrorModal(true);
     }
   };

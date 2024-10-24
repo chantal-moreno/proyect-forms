@@ -13,11 +13,11 @@ export const AuthProvider = ({ children }) => {
   const signup = async (user) => {
     try {
       const res = await signUpRequest(user);
-      console.log(res.data);
+      // console.log(res.data);
       setUser(res.data);
       setIsAuthenticated(true);
     } catch (error) {
-      console.log(error.response);
+      console.warn(error.response);
       setErrors(error.response.data);
     }
   };
@@ -25,11 +25,11 @@ export const AuthProvider = ({ children }) => {
   const signin = async (user) => {
     try {
       const res = await signInRequest(user);
-      console.log(res.data);
+      // console.log(res.data);
       setUser(res.data);
       setIsAuthenticated(true);
     } catch (error) {
-      console.log(error.response);
+      console.warn(error.response);
       setErrors(error.response.data);
     }
   };
@@ -56,11 +56,11 @@ export const AuthProvider = ({ children }) => {
         try {
           const res = await verifyTokenRequest(cookies.token);
           if (!res.data) return setIsAuthenticated(false);
-          console.log(res.data);
+          // console.log(res.data);
           setUser(res.data);
           setIsAuthenticated(true);
         } catch (error) {
-          console.log(error.response);
+          console.warn(error.response);
           setIsAuthenticated(false);
           setUser(null);
         }
